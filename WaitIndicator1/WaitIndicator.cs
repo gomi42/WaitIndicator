@@ -27,7 +27,7 @@ namespace WaitIndicator1
 
             while (true)
             {
-                var shape = GetTemplateChild($"Part_Ellipse{shapeIndex}") as Shape;
+                var shape = GetTemplateChild($"Part_Shape{shapeIndex}") as Shape;
 
                 if (shape == null)
                 {
@@ -73,6 +73,10 @@ namespace WaitIndicator1
                 var y = sin * radius + radius;
                 Canvas.SetLeft(shape, x);
                 Canvas.SetTop(shape, y);
+
+                shape.RenderTransformOrigin = new Point(0.5, 0.5);
+                var degrees = angle * 180 / Math.PI + 90;
+                shape.RenderTransform = new RotateTransform(degrees);
 
                 angle += 2 * Math.PI / numShapes;
 
