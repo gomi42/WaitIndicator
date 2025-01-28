@@ -1,0 +1,62 @@
+﻿<Window x:Class="WaitIndicator6Block.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:WaitIndicator6Block"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Wait Indicator 6 Block"
+        Width="439"
+        Height="318"
+        mc:Ignorable="d">
+    <Grid>
+        <local:WaitIndicator Width="50"
+                             Height="100"
+                             Margin="18,20,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             SegmentGap="10"
+                             SegmentHeight="30"
+                             Segments="8" />
+
+        <local:WaitIndicator Width="100"
+                             Height="100"
+                             Margin="115,20,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             SegmentGap="10"
+                             SegmentHeight="10"
+                             Segments="16" />
+
+        <local:WaitIndicator Width="70"
+                             Height="100"
+                             Margin="18,141,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             Fill="Chocolate"
+                             SegmentGap="10"
+                             SegmentHeight="40"
+                             Segments="26" />
+
+        <local:WaitIndicator Width="70"
+                             Height="100"
+                             Margin="115,141,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             Fill="Green"
+                             SegmentGap="30"
+                             SegmentHeight="40"
+                             Segments="26" />
+
+
+        <local:WaitIndicator Width="50"
+                             Height="100"
+                             Margin="207,141,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             Fill="Blue"
+                             SegmentGap="50"
+                             SegmentHeight="30"
+                             Segments="26" />
+
+    </Grid>
+</Window>
