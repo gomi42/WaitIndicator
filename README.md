@@ -30,6 +30,6 @@ Like version 4 this version implements everything in C# code, no XAML. The diffe
 
 **SegmentHeight:** The hight of each segment along the radius, given in percent of the current radius
 
-**SegmentGap:** The gap between each segment, given in percent of segment length
+**SegmentGap:** The gap between each segment, given in percent of the lenght of a segment
 
 **Fill**: The brush to fill each segment
