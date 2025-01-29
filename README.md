@@ -36,7 +36,7 @@ This version implements circle segments instead of dots. The control is highly c
 
 **SegmentHeight:** The hight of each segment along the radius, given in percent of the current radius
 
-**SegmentGap:** The gap between each segment, given in percent of the lengtt of a segment
+**SegmentGap:** The gap between each segment, given in percent of the length of a segment
 
 **Fill**: The brush to fill each segment
 
