@@ -18,7 +18,7 @@ In case a different number of dots is needed it is a quite elaborate task to cal
 
 ### Version 4: Dots
 
-![example](/example.jpg)
+![example](/dots.gif)
 
 This version implements all in C#, no XAML required. Just define the number of dots, the time for one circle and the fill color.
 
@@ -30,7 +30,7 @@ This version implements all in C#, no XAML required. Just define the number of d
 
 ### Version 5: Segments
 
-![example](/block.png)
+![example](/block.gif)
 
 This version implements circle segments instead of dots. The control is highly configurable. Just test out what fits your needs, what you like best:
 
