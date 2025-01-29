@@ -15,9 +15,9 @@
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
                              SegmentGap="10"
-                             Duration="0:0:1.6"
                              SegmentHeight="30"
-                             Segments="8" />
+                             Segments="8"
+                             Duration="0:0:1.6" />
 
         <local:WaitIndicator Width="100"
                              Height="100"
@@ -35,7 +35,7 @@
                              VerticalAlignment="Top"
                              SegmentGap="15"
                              SegmentHeight="70"
-                             Segments="10" >
+                             Segments="10">
             <local:WaitIndicator.Fill>
                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                     <GradientStop Offset="0" Color="Blue" />
@@ -49,10 +49,10 @@
                              Margin="304,20,0,0"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
-                             SegmentGap="10"
                              Fill="DarkGoldenrod"
+                             SegmentGap="10"
                              SegmentHeight="90"
-                             Segments="16"/>
+                             Segments="16" />
 
         <local:WaitIndicator Width="70"
                              Height="100"
