@@ -1,6 +1,6 @@
 # Wait Indicator
 
-Implementatin of different wait indicator controls. The main advantage of these wait indicators is they are fully resizable and they are highly configurable (see properties). Different settings create very different looks. Test different combinations of the number of shapes, the height of a shape and the gap betweeen shapes. See below some examples.
+Implementation of different wait indicator controls. The main advantage of these wait indicators is they are fully resizable and they are highly configurable (see properties). Different settings create very different looks. Test different combinations of the number of shapes, the height of a shape and the gap betweeen shapes. See below some examples.
 
 ### DotsWaitIndicator
 
