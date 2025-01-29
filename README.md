@@ -46,7 +46,7 @@ This version implements circle segments instead of dots. The control is highly c
 
 ### Version 6: Sticks
 
-![example](/sticks.png)
+![example](/sticks.jpg)
 
 This version implements sticks. The control is highly configurable. Just test out what fits your needs, what you like best:
 
