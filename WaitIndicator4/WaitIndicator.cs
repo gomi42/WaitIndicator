@@ -130,8 +130,13 @@ namespace WaitIndicator4
                 var x = cos * radius + radius;
                 var y = sin * radius + radius;
 
+                var tg = new TransformGroup();
+                var trans = new TranslateTransform(-shapeWidth/2, 0);
                 var degrees = angle * 180 / Math.PI + 90;
-                shape.RenderTransform = new RotateTransform(degrees);
+                var rt = new RotateTransform(degrees);
+                tg.Children.Add(trans);
+                tg.Children.Add(rt);
+                shape.RenderTransform = tg;
 
                 shape.Arrange(new Rect(x, y, shapeWidth, shapeWidth));
 
