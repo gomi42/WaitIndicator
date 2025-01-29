@@ -231,8 +231,6 @@ namespace WaitIndicator6Block
             var cq = b * b - innerRadius*innerRadius;
 
             var xq1 = (-bq + Math.Sqrt(bq*bq - 4*aq*cq)) / (2 * aq);
-            var xq2 = (-bq - Math.Sqrt(bq*bq - 4*aq*cq)) / (2 * aq);
-
             var yq = Math.Sqrt(innerRadius * innerRadius - xq1 * xq1);
 
             x1 = -xq1;

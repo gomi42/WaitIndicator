@@ -16,7 +16,7 @@ This version is very similar to version 1, exept the opacity of the dots is anim
 
 In case a different number of dots is needed it is a quite elaborate task to calculate the exact timing of the animations (which was done by hand in version 1 and 2). This version keeps the definition of the dots in the XAML style but moves the creation of the animation to the C# part of the control.
 
-### Version 4
+### Version 4: Dots
 
 This version implements all in C#, no XAML required. Just define the number of dots, the time for one circle and the fill color.
 
@@ -26,7 +26,7 @@ This version implements all in C#, no XAML required. Just define the number of d
 
 **Duration**: The duration for one round (one circle)
 
-### Version 5
+### Version 5: Segments
 
 ![example](/block.png)
 

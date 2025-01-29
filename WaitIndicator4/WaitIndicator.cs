@@ -118,7 +118,7 @@ namespace WaitIndicator4
 
             var radius = numShapes * width / (2 * (numShapes + Math.PI));
             var shapeWidth = Math.Truncate(2 * Math.PI * radius / numShapes * 0.85);
-            radius = (width - shapeWidth) / 2;
+            radius = width / 2;
 
             for (int i = 0; i < numShapes; i++)
             {
@@ -129,6 +129,9 @@ namespace WaitIndicator4
 
                 var x = cos * radius + radius;
                 var y = sin * radius + radius;
+
+                var degrees = angle * 180 / Math.PI + 90;
+                shape.RenderTransform = new RotateTransform(degrees);
 
                 shape.Arrange(new Rect(x, y, shapeWidth, shapeWidth));
 
@@ -212,6 +215,7 @@ namespace WaitIndicator4
         {
             var shape = new Ellipse();
             shape.Fill = Fill;
+            shape.RenderTransformOrigin = new Point(0, 0);
             children.Add(shape);
         }
 
