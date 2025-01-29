@@ -236,11 +236,6 @@ namespace WaitIndicator7Sticks
             InvalidateArrange();
         }
 
-        private void OnStickHeightChanged()
-        {
-            InvalidateArrange();
-        }
-
         private void CreateShape()
         {
             var shape = new Rectangle();
