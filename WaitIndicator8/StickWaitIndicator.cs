@@ -7,6 +7,15 @@ namespace WaitIndicator
 {
     internal class StickWaitIndicator : WaitIndicator
     {
+        public double ShapeHeight
+        {
+            get { return (double)GetValue(ShapeHeightProperty); }
+            set { SetValue(ShapeHeightProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShapeHeightProperty =
+            DependencyProperty.Register("ShapeHeight", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(50.0, FrameworkPropertyMetadataOptions.AffectsArrange));
+
         protected override Size ArrangeOverride(Size arrangeSize)
         {
             if (VisualChildrenCount == 0)
