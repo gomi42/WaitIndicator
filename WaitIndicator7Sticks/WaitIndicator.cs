@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WaitIndicator6Block
+namespace WaitIndicator7Sticks
 {
     public class WaitIndicator : FrameworkElement
     {
@@ -36,47 +36,38 @@ namespace WaitIndicator6Block
             ((WaitIndicator)d).OnFillChanged();
         }
 
-        public int Segments
+        public int Sticks
         {
-            get { return (int)GetValue(SegmentsProperty); }
-            set { SetValue(SegmentsProperty, value); }
+            get { return (int)GetValue(SticksProperty); }
+            set { SetValue(SticksProperty, value); }
         }
 
-        public static readonly DependencyProperty SegmentsProperty =
-            DependencyProperty.Register("Segments", typeof(int), typeof(WaitIndicator), new PropertyMetadata(8, SegmentsChanged));
+        public static readonly DependencyProperty SticksProperty =
+            DependencyProperty.Register("Sticks", typeof(int), typeof(WaitIndicator), new PropertyMetadata(8, SticksChanged));
 
-        private static void SegmentsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void SticksChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((WaitIndicator)d).OnSegmentsNumberChanged();
+            ((WaitIndicator)d).OnSticksChanged();
         }
 
-        public double SegmentGap
+        public double StickHeight
         {
-            get { return (double)GetValue(SegmentGapProperty); }
-            set { SetValue(SegmentGapProperty, value); }
+            get { return (double)GetValue(StickHeightProperty); }
+            set { SetValue(StickHeightProperty, value); }
         }
 
-        public static readonly DependencyProperty SegmentGapProperty =
-            DependencyProperty.Register("SegmentGap", typeof(double), typeof(WaitIndicator), new PropertyMetadata(10.0, SegmentGapChanged));
+        // Using a DependencyProperty as the backing store for StickHeight.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty StickHeightProperty =
+            DependencyProperty.Register("StickHeight", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(50.0, FrameworkPropertyMetadataOptions.AffectsArrange));
 
-        private static void SegmentGapChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public double SticksGap
         {
-            ((WaitIndicator)d).OnSegmentsChanged();
+            get { return (double)GetValue(SticksGapProperty); }
+            set { SetValue(SticksGapProperty, value); }
         }
 
-        public double SegmentHeight
-        {
-            get { return (double)GetValue(SegmentHeightProperty); }
-            set { SetValue(SegmentHeightProperty, value); }
-        }
-
-        public static readonly DependencyProperty SegmentHeightProperty =
-            DependencyProperty.Register("SegmentHeight", typeof(double), typeof(WaitIndicator), new PropertyMetadata(30.0, SegmentHeightChanged));
-
-        private static void SegmentHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((WaitIndicator)d).OnSegmentsChanged();
-        }
+        public static readonly DependencyProperty SticksGapProperty =
+            DependencyProperty.Register("SticksGap", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.AffectsArrange));
 
         public TimeSpan Duration
         {
@@ -136,12 +127,6 @@ namespace WaitIndicator6Block
             }
 
             int numShapes = VisualChildrenCount;
-
-            if (numShapes == 0)
-            {
-                return arrangeSize;
-            }
-
             double angle = 0;
             double width = arrangeSize.Width;
 
@@ -150,12 +135,14 @@ namespace WaitIndicator6Block
                 width = arrangeSize.Height;
             }
 
+            var innerRadius = (width - width * StickHeight / 100) / 2;
+            var shapeWidth = Math.Truncate(2 * Math.PI * innerRadius / numShapes * (100 - SticksGap) / 100);
             var radius = width / 2;
-            var geometry = CreatePath(radius);
+            var shapeHeight = radius - innerRadius;
 
             for (int i = 0; i < numShapes; i++)
             {
-                var shape = (Path)children[i];
+                var shape = (Shape)children[i];
 
                 var sin = Math.Sin(angle);
                 var cos = Math.Cos(angle);
@@ -163,97 +150,26 @@ namespace WaitIndicator6Block
                 var x = cos * radius + radius;
                 var y = sin * radius + radius;
 
+                var tg = new TransformGroup();
+                var trans = new TranslateTransform(-shapeWidth / 2, 0);
                 var degrees = angle * 180 / Math.PI + 90;
-                shape.RenderTransform = new RotateTransform(degrees);
+                var rt = new RotateTransform(degrees);
+                tg.Children.Add(trans);
+                tg.Children.Add(rt);
+                shape.RenderTransform = tg;
 
-                shape.Data = geometry;
-                shape.Arrange(new Rect(x, y, width, radius));
+                shape.Arrange(new Rect(x, y, shapeWidth, shapeHeight));
+
                 shape.Opacity = (numShapes - i) / (double)numShapes;
-
                 angle += 2 * Math.PI / numShapes;
             }
 
             return arrangeSize;
         }
 
-        private Geometry CreatePath(double outerRadius)
-        {
-            int numShapes = VisualChildrenCount;
-            var angle = 2 * Math.PI / numShapes;
-            var angleWithGap = 2 * Math.PI / numShapes * (100 - SegmentGap) / 100;
-
-            double innerRadius = outerRadius * (100 - SegmentHeight) / 100;
-
-            var sin = Math.Sin(angleWithGap / 2);
-            var cos = Math.Cos(angleWithGap / 2);
-
-            var x1 = -sin * outerRadius;
-            var y1 = cos * outerRadius;
-
-            var x2 = -x1;
-            var y2 = y1;
-
-            PathGeometry pathGeometry = new PathGeometry();
-            PathFigureCollection pathFigureCollection = new PathFigureCollection();
-            pathGeometry.Figures = pathFigureCollection;
-            PathFigure pathFigure;
-            PathSegmentCollection pathSegmentCollection;
-            pathFigure = new PathFigure();
-            pathFigureCollection.Add(pathFigure);
-            pathFigure.IsClosed = true;
-            pathFigure.StartPoint = new Point(x1, outerRadius - y1);
-
-            pathSegmentCollection = new PathSegmentCollection();
-            pathFigure.Segments = pathSegmentCollection;
-
-            ArcSegment arcSegment;
-            arcSegment = new ArcSegment();
-            pathSegmentCollection.Add(arcSegment);
-
-            arcSegment.Point = new Point(x2, outerRadius - y2);
-            arcSegment.Size = new Size(outerRadius, outerRadius);
-            arcSegment.SweepDirection = SweepDirection.Clockwise;
-            arcSegment.IsLargeArc = false;
-
-            /////////
-
-            var a = Math.Cos(angle / 2)  / Math.Sin(angle / 2);
-            var b = y1 + a * x1;
-
-            var aq = 1 + a * a;
-            var bq = 2 * a *b;
-            var cq = b * b - innerRadius*innerRadius;
-
-            var xq1 = (-bq + Math.Sqrt(bq*bq - 4*aq*cq)) / (2 * aq);
-            var yq = Math.Sqrt(innerRadius * innerRadius - xq1 * xq1);
-
-            x1 = -xq1;
-            y1 = yq;
-
-            x2 = xq1;
-            y2 = yq;
-
-            LineSegment lineSegment;
-            lineSegment = new LineSegment();
-            pathSegmentCollection.Add(lineSegment);
-            lineSegment.Point = new Point(x2, outerRadius - y1);
-
-            arcSegment = new ArcSegment();
-            pathSegmentCollection.Add(arcSegment);
-
-            arcSegment.Point = new Point(x1, outerRadius - y2);
-            arcSegment.Size = new Size(innerRadius, innerRadius);
-            arcSegment.SweepDirection = SweepDirection.Counterclockwise;
-            arcSegment.IsLargeArc = false;
-
-            pathGeometry.Freeze();
-
-            return pathGeometry;
-        }
-
         private void CreateShapes()
         {
-            for (int i = 0; i < Segments; i++)
+            for (int i = 0; i < Sticks; i++)
             {
                 CreateShape();
             }
@@ -297,20 +213,20 @@ namespace WaitIndicator6Block
             }
         }
 
-        private void OnSegmentsNumberChanged()
+        private void OnSticksChanged()
         {
             RemoveStoryboard();
 
-            if (Segments < VisualChildrenCount)
+            if (Sticks < VisualChildrenCount)
             {
-                while (VisualChildrenCount > Segments)
+                while (VisualChildrenCount > Sticks)
                 {
                     children.RemoveAt(0);
                 }
             }
             else
             {
-                while (VisualChildrenCount < Segments)
+                while (VisualChildrenCount < Sticks)
                 {
                     CreateShape();
                 }
@@ -320,26 +236,16 @@ namespace WaitIndicator6Block
             InvalidateArrange();
         }
 
-        private void OnSegmentsChanged()
+        private void OnStickHeightChanged()
         {
-            RemoveStoryboard();
-
-            while (VisualChildrenCount > 0)
-            {
-                children.RemoveAt(0);
-            }
-
-            CreateShapes();
-            TryCreateAndRunStoryboard();
             InvalidateArrange();
         }
 
         private void CreateShape()
         {
-            var shape = new Path();
+            var shape = new Rectangle();
             shape.Fill = Fill;
             shape.RenderTransformOrigin = new Point(0, 0);
-            shape.Stretch = Stretch.None;
             children.Add(shape);
         }
 
@@ -361,7 +267,7 @@ namespace WaitIndicator6Block
 
         private void TryCreateAndRunStoryboard()
         {
-            if (Visibility == Visibility.Visible && Duration.TotalMilliseconds > 0 && Segments > 0)
+            if (Visibility == Visibility.Visible && Duration.TotalMilliseconds > 0 && Sticks > 0)
             {
                 CreateStoryBoard();
                 storyboard.Begin(this, true);
