@@ -15,17 +15,44 @@
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
                              SegmentGap="10"
+                             Duration="0:0:1.6"
                              SegmentHeight="30"
                              Segments="8" />
 
         <local:WaitIndicator Width="100"
                              Height="100"
-                             Margin="115,20,0,0"
+                             Margin="92,20,0,0"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
                              SegmentGap="10"
                              SegmentHeight="10"
                              Segments="16" />
+
+        <local:WaitIndicator Width="81"
+                             Height="87"
+                             Margin="207,20,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             SegmentGap="15"
+                             SegmentHeight="70"
+                             Segments="10" >
+            <local:WaitIndicator.Fill>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Offset="0" Color="Blue" />
+                    <GradientStop Offset="1" Color="Red" />
+                </LinearGradientBrush>
+            </local:WaitIndicator.Fill>
+        </local:WaitIndicator>
+
+        <local:WaitIndicator Width="61"
+                             Height="87"
+                             Margin="304,20,0,0"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             SegmentGap="10"
+                             Fill="DarkGoldenrod"
+                             SegmentHeight="90"
+                             Segments="16"/>
 
         <local:WaitIndicator Width="70"
                              Height="100"

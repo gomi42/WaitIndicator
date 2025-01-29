@@ -50,14 +50,14 @@ namespace WaitIndicator4
             ((WaitIndicator)d).OnDotsChanged();
         }
 
-        public int Time
+        public TimeSpan Duration
         {
-            get { return (int)GetValue(TimeProperty); }
-            set { SetValue(TimeProperty, value); }
+            get { return (TimeSpan)GetValue(DurationProperty); }
+            set { SetValue(DurationProperty, value); }
         }
 
-        public static readonly DependencyProperty TimeProperty =
-            DependencyProperty.Register("Time", typeof(int), typeof(WaitIndicator), new PropertyMetadata(1600, TimeChanged));
+        public static readonly DependencyProperty DurationProperty =
+            DependencyProperty.Register("Duration", typeof(TimeSpan), typeof(WaitIndicator), new PropertyMetadata(TimeSpan.FromMilliseconds(1600), TimeChanged));
 
         private static void TimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -149,7 +149,8 @@ namespace WaitIndicator4
 
         private void CreateStoryBoard()
         {
-            int step = Time / VisualChildrenCount;
+            double duration = Duration.TotalMilliseconds;
+            double step = duration / VisualChildrenCount;
 
             storyboard = new Storyboard();
             storyboard.RepeatBehavior = RepeatBehavior.Forever;
@@ -158,7 +159,7 @@ namespace WaitIndicator4
             {
                 var shape = (Shape)children[i];
 
-                var animation2 = new DoubleAnimation((double)step / Time * i, 0.0, new Duration(TimeSpan.FromMilliseconds(i * step)));
+                var animation2 = new DoubleAnimation((double)step / duration * i, 0.0, new Duration(TimeSpan.FromMilliseconds(i * step)));
                 Storyboard.SetTarget(animation2, shape);
                 Storyboard.SetTargetProperty(animation2, new PropertyPath(OpacityProperty));
                 storyboard.Children.Add(animation2);
@@ -168,7 +169,7 @@ namespace WaitIndicator4
             {
                 var shape = (Shape)children[i];
 
-                var animation = new DoubleAnimation(1.0, (double)step / Time * i, new Duration(TimeSpan.FromMilliseconds(Time - i * step)));
+                var animation = new DoubleAnimation(1.0, (double)step / duration * i, new Duration(TimeSpan.FromMilliseconds(duration - i * step)));
                 animation.BeginTime = TimeSpan.FromMilliseconds(i * step);
                 Storyboard.SetTarget(animation, shape);
                 Storyboard.SetTargetProperty(animation, new PropertyPath(OpacityProperty));
@@ -232,7 +233,7 @@ namespace WaitIndicator4
 
         private void TryCreateAndRunStoryboard()
         {
-            if (Visibility == Visibility.Visible && Time > 0 && Dots > 0)
+            if (Visibility == Visibility.Visible && Duration.TotalMilliseconds > 0 && Dots > 0)
             {
                 CreateStoryBoard();
                 storyboard.Begin(this, true);

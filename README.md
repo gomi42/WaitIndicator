@@ -20,16 +20,24 @@ In case a different number of dots is needed it is a quite elaborate task to cal
 
 This version implements all in C#, no XAML required. Just define the number of dots, the time for one circle and the fill color.
 
+**Dots:** Number of dots
+
+**Fill**: The brush to fill each dot
+
+**Duration**: The duration for one round (one circle)
+
 ### Version 5
 
-![example](/block.jpg)
+![example](/block.png)
 
-Like version 4 this version implements everything in C# code, no XAML. The difference is instead of dots circle segments are drawn. The control is highly configurable. Just test out what fits your needs, what you like best:
+This version implements circle segments instead of dots. The control is highly configurable. Just test out what fits your needs, what you like best:
 
 **Segments:** Number of segments
 
 **SegmentHeight:** The hight of each segment along the radius, given in percent of the current radius
 
-**SegmentGap:** The gap between each segment, given in percent of the lenght of a segment
+**SegmentGap:** The gap between each segment, given in percent of the lengtt of a segment
 
 **Fill**: The brush to fill each segment
+
+**Duration**: The duration for one round (one circle)

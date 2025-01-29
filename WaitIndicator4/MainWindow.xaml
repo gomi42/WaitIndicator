@@ -35,7 +35,7 @@
                              VerticalAlignment="Top"
                              Dots="22"
                              Fill="Blue"
-                             Time="1000" />
+                             Duration="0:0:1.0" />
         <local:WaitIndicator Width="40"
                              Height="40"
                              Margin="262,155,0,0"
@@ -43,6 +43,6 @@
                              VerticalAlignment="Top"
                              Dots="6"
                              Fill="Chocolate"
-                             Time="2000" />
+                             Duration="0:0:2.0" />
     </Grid>
 </Window>
