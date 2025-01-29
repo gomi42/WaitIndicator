@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WaitIndicator1.Properties
+namespace WaitIndicator8.Properties
 {
 
 

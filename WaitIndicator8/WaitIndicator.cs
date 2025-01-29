@@ -6,9 +6,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace WaitIndicator7Sticks
+namespace WaitIndicator
 {
-    public class WaitIndicator : FrameworkElement
+    public abstract class WaitIndicator : FrameworkElement
     {
         private UIElementCollection children;
         private Storyboard storyboard;
@@ -36,38 +36,37 @@ namespace WaitIndicator7Sticks
             ((WaitIndicator)d).OnFillChanged();
         }
 
-        public int Sticks
+        public int Shapes
         {
-            get { return (int)GetValue(SticksProperty); }
-            set { SetValue(SticksProperty, value); }
+            get { return (int)GetValue(ShapesProperty); }
+            set { SetValue(ShapesProperty, value); }
         }
 
-        public static readonly DependencyProperty SticksProperty =
-            DependencyProperty.Register("Sticks", typeof(int), typeof(WaitIndicator), new PropertyMetadata(8, SticksChanged));
+        public static readonly DependencyProperty ShapesProperty =
+            DependencyProperty.Register("Shapes", typeof(int), typeof(WaitIndicator), new PropertyMetadata(8, ShapesChanged));
 
-        private static void SticksChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void ShapesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((WaitIndicator)d).OnSticksChanged();
+            ((WaitIndicator)d).OnShapesChanged();
         }
 
-        public double StickHeight
+        public double ShapeHeight
         {
-            get { return (double)GetValue(StickHeightProperty); }
-            set { SetValue(StickHeightProperty, value); }
+            get { return (double)GetValue(ShapeHeightProperty); }
+            set { SetValue(ShapeHeightProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for StickHeight.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty StickHeightProperty =
-            DependencyProperty.Register("StickHeight", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(50.0, FrameworkPropertyMetadataOptions.AffectsArrange));
+        public static readonly DependencyProperty ShapeHeightProperty =
+            DependencyProperty.Register("ShapeHeight", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(50.0, FrameworkPropertyMetadataOptions.AffectsArrange));
 
-        public double SticksGap
+        public double ShapesGap
         {
-            get { return (double)GetValue(SticksGapProperty); }
-            set { SetValue(SticksGapProperty, value); }
+            get { return (double)GetValue(ShapesGapProperty); }
+            set { SetValue(ShapesGapProperty, value); }
         }
 
-        public static readonly DependencyProperty SticksGapProperty =
-            DependencyProperty.Register("SticksGap", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.AffectsArrange));
+        public static readonly DependencyProperty ShapesGapProperty =
+            DependencyProperty.Register("ShapesGap", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.AffectsArrange));
 
         public TimeSpan Duration
         {
@@ -119,59 +118,11 @@ namespace WaitIndicator7Sticks
             return new Size(width, width);
         }
 
-        protected override Size ArrangeOverride(Size arrangeSize)
-        {
-            if (VisualChildrenCount == 0)
-            {
-                return arrangeSize;
-            }
-
-            int numShapes = VisualChildrenCount;
-            double angle = 0;
-            double width = arrangeSize.Width;
-
-            if (arrangeSize.Height < arrangeSize.Width)
-            {
-                width = arrangeSize.Height;
-            }
-
-            var innerRadius = (width - width * StickHeight / 100) / 2;
-            var shapeWidth = Math.Truncate(2 * Math.PI * innerRadius / numShapes * (100 - SticksGap) / 100);
-            var radius = width / 2;
-            var shapeHeight = radius - innerRadius;
-
-            for (int i = 0; i < numShapes; i++)
-            {
-                var shape = (Shape)children[i];
-
-                var sin = Math.Sin(angle);
-                var cos = Math.Cos(angle);
-
-                var x = cos * radius + radius;
-                var y = sin * radius + radius;
-
-                var tg = new TransformGroup();
-                var trans = new TranslateTransform(-shapeWidth / 2, 0);
-                var degrees = angle * 180 / Math.PI + 90;
-                var rt = new RotateTransform(degrees);
-                tg.Children.Add(trans);
-                tg.Children.Add(rt);
-                shape.RenderTransform = tg;
-
-                shape.Arrange(new Rect(x, y, shapeWidth, shapeHeight));
-
-                shape.Opacity = (numShapes - i) / (double)numShapes;
-                angle += 2 * Math.PI / numShapes;
-            }
-
-            return arrangeSize;
-        }
-
         private void CreateShapes()
         {
-            for (int i = 0; i < Sticks; i++)
+            for (int i = 0; i < Shapes; i++)
             {
-                CreateShape();
+                AddNewShape();
             }
         }
 
@@ -213,22 +164,22 @@ namespace WaitIndicator7Sticks
             }
         }
 
-        private void OnSticksChanged()
+        private void OnShapesChanged()
         {
             RemoveStoryboard();
 
-            if (Sticks < VisualChildrenCount)
+            if (Shapes < VisualChildrenCount)
             {
-                while (VisualChildrenCount > Sticks)
+                while (VisualChildrenCount > Shapes)
                 {
                     children.RemoveAt(0);
                 }
             }
             else
             {
-                while (VisualChildrenCount < Sticks)
+                while (VisualChildrenCount < Shapes)
                 {
-                    CreateShape();
+                    AddNewShape();
                 }
             }
 
@@ -236,13 +187,14 @@ namespace WaitIndicator7Sticks
             InvalidateArrange();
         }
 
-        private void CreateShape()
+        private void AddNewShape()
         {
-            var shape = new Rectangle();
+            var shape = CreateShape();
             shape.Fill = Fill;
-            shape.RenderTransformOrigin = new Point(0, 0);
             children.Add(shape);
         }
+
+        protected abstract Shape CreateShape();
 
         private void OnTimeChanged()
         {
@@ -262,7 +214,7 @@ namespace WaitIndicator7Sticks
 
         private void TryCreateAndRunStoryboard()
         {
-            if (Visibility == Visibility.Visible && Duration.TotalMilliseconds > 0 && Sticks > 0)
+            if (Visibility == Visibility.Visible && Duration.TotalMilliseconds > 0 && Shapes > 0)
             {
                 CreateStoryBoard();
                 storyboard.Begin(this, true);

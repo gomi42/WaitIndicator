@@ -1,60 +1,28 @@
 # Wait Indicator
 
-Here you find different flavors of an resizable wait indicator control. All versions have in common that the code to position the dots along a circle and to calculate the appropriate size of the dots is placed the control's C# code.
+Implementatin of different wait indicator controls. The main advantage of these wait indicators is they are fully resizable and they are highly configurable (see properties). Different settings create very different looks. Test different combinations of the number of shapes, the height of a shape and the gap betweeen shapes. See below some examples.
 
-While version 1 to 3 are more for demonstration purposes they might serve as a basis for very special implementations. Version 4 to 6, the dot, segment and stick wait indicators, are ready-to-use controls in your production environment.
-
-### Version 1: minimal code behind, most in XAML, ColorAnimation
-
-The strenght of this version is it implements (besides the mentioned placement of the dots) everything in a XAML style. The animations are done via a ColorAnimation.
-
-### Version 2: minimal code behind, most in XAML, opacity animation
-
-This version is very similar to version 1, exept the opacity of the dots is animated (instead of its color).
-
-### Version 3: animation in code, dots in XAML
-
-In case a different number of dots is needed it is a quite elaborate task to calculate the exact timing of the animations (which was done by hand in version 1 and 2). This version keeps the definition of the dots in the XAML style but moves the creation of the animation to the C# part of the control.
-
-### Version 4: Dots
+### DotsWaitIndicator
 
 ![example](/dots.gif)
 
-This version implements all in C#, no XAML required. Just define the number of dots, the time for one circle and the fill color.
-
-**Dots:** Number of dots
-
-**Fill**: The brush to fill each dot
-
-**Duration**: The duration for one round (one circle)
-
-### Version 5: Segments
+### SegmentsWaitIndicator
 
 ![example](/block.gif)
 
-This version implements circle segments instead of dots. The control is highly configurable. Just test out what fits your needs, what you like best:
-
-**Segments:** Number of segments
-
-**SegmentHeight:** The hight of each segment along the radius, given in percent of the current radius
-
-**SegmentGap:** The gap between each segment, given in percent of the length of a segment
-
-**Fill**: The brush to fill each segment
-
-**Duration**: The duration for one round (one circle)
-
-### Version 6: Sticks
+### SticksWaitIndicator
 
 ![example](/sticks.gif)
 
-This version implements sticks. The control is highly configurable. Just test out what fits your needs, what you like best:
+### Properties
 
-**Sticks:** Number of sticks
+All wait indicators share the same properties:
 
-**StickHeight:** The hight of each stick along the radius, given in percent of the current radius
+**Shapes:** Number of shapes
 
-**StickGap:** The gap between each stick, given in percent of the length of a segment
+**ShapeHeight:** The hight of each shape along the radius, given in percent of the current radius
+
+**ShapeGap:** The gap between each shape, given in percent of the length of a segment
 
 **Fill**: The brush to fill each segment
 
