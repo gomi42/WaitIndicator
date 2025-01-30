@@ -16,11 +16,11 @@ Implementation of different wait indicator controls. The main advantage of these
 
 ### Properties
 
-All wait indicators share the same properties:
+The properties of the wait indicators are:
 
 **Shapes:** Number of shapes
 
-**ShapeHeight:** The hight of each shape along the radius, given in percent of the current radius
+**ShapeHeight:** The hight of each shape along the radius, given in percent of the current radius (not supported by DotsWaitIndicator)
 
 **ShapeGap:** The gap between each shape, given in percent of the length of a segment
 
