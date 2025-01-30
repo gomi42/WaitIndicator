@@ -26,4 +26,4 @@ The properties of the wait indicators are:
 
 **Fill**: The brush to fill each segment
 
-**Duration**: The duration for one round (one circle)
+**Duration**: The duration for one round (one circle), 0:0:0.0 stops the animation
