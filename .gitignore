@@ -361,4 +361,10 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/WaitIndicator1/WaitIndicator1.csproj
+WaitIndicator1/
+WaitIndicator2/
+WaitIndicator3/
+WaitIndicator4/
+WaitIndicator5/
+WaitIndicator6Block/
+WaitIndicator7Sticks/
