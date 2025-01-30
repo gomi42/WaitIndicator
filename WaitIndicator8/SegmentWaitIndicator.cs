@@ -26,6 +26,15 @@ namespace WaitIndicator
             currentGeometry = null;
         }
 
+        protected override Shape CreateShape()
+        {
+            var shape = new Path();
+            shape.RenderTransformOrigin = new Point(0, 0);
+            shape.Stretch = Stretch.None;
+
+            return shape;
+        }
+
         private Geometry CreatePath(double outerRadius)
         {
             int numShapes = VisualChildrenCount;
@@ -99,15 +108,6 @@ namespace WaitIndicator
             pathGeometry.Freeze();
 
             return pathGeometry;
-        }
-
-        protected override Shape CreateShape()
-        {
-            var shape = new Path();
-            shape.RenderTransformOrigin = new Point(0, 0);
-            shape.Stretch = Stretch.None;
-
-            return shape;
         }
     }
 }
