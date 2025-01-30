@@ -5,63 +5,25 @@ using System.Windows.Shapes;
 
 namespace WaitIndicator
 {
-    internal class SegmentWaitIndicator : WaitIndicator
+    internal class SegmentWaitIndicator : WaitIndicatorHeight
     {
-        public double ShapeHeight
+        Geometry currentGeometry;
+
+        protected override Size BeginArrangeShapes(double radius, int numShapes)
         {
-            get { return (double)GetValue(ShapeHeightProperty); }
-            set { SetValue(ShapeHeightProperty, value); }
+            currentGeometry = CreatePath(radius);
+            return new Size(currentGeometry.Bounds.Width, currentGeometry.Bounds.Height);
         }
 
-        public static readonly DependencyProperty ShapeHeightProperty =
-            DependencyProperty.Register("ShapeHeight", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(50.0, FrameworkPropertyMetadataOptions.AffectsArrange));
-
-        protected override Size ArrangeOverride(Size arrangeSize)
+        protected override void PrepareArrangeShape(Shape shape, double angle, Size shapeSize)
         {
-            if (VisualChildrenCount == 0)
-            {
-                return arrangeSize;
-            }
+            ((Path)shape).Data = currentGeometry;
+            shape.RenderTransform = new RotateTransform(angle);
+        }
 
-            int numShapes = VisualChildrenCount;
-
-            if (numShapes == 0)
-            {
-                return arrangeSize;
-            }
-
-            double angle = 0;
-            double width = arrangeSize.Width;
-
-            if (arrangeSize.Height < arrangeSize.Width)
-            {
-                width = arrangeSize.Height;
-            }
-
-            var radius = width / 2;
-            var geometry = CreatePath(radius);
-
-            for (int i = 0; i < numShapes; i++)
-            {
-                var shape = (Path)GetVisualChild(i);
-
-                var sin = Math.Sin(angle);
-                var cos = Math.Cos(angle);
-
-                var x = cos * radius + radius;
-                var y = sin * radius + radius;
-
-                var degrees = angle * 180 / Math.PI + 90;
-                shape.RenderTransform = new RotateTransform(degrees);
-
-                shape.Data = geometry;
-                shape.Arrange(new Rect(x, y, width, radius));
-                shape.Opacity = (numShapes - i) / (double)numShapes;
-
-                angle += 2 * Math.PI / numShapes;
-            }
-
-            return arrangeSize;
+        protected override void EndArrangeShapes()
+        {
+            currentGeometry = null;
         }
 
         private Geometry CreatePath(double outerRadius)

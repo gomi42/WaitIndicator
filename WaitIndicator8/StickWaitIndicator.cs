@@ -5,63 +5,26 @@ using System.Windows.Shapes;
 
 namespace WaitIndicator
 {
-    internal class StickWaitIndicator : WaitIndicator
+    internal class StickWaitIndicator : WaitIndicatorHeight
     {
-        public double ShapeHeight
+        protected override Size BeginArrangeShapes(double radius, int numShapes)
         {
-            get { return (double)GetValue(ShapeHeightProperty); }
-            set { SetValue(ShapeHeightProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShapeHeightProperty =
-            DependencyProperty.Register("ShapeHeight", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(50.0, FrameworkPropertyMetadataOptions.AffectsArrange));
-
-        protected override Size ArrangeOverride(Size arrangeSize)
-        {
-            if (VisualChildrenCount == 0)
-            {
-                return arrangeSize;
-            }
-
-            int numShapes = VisualChildrenCount;
-            double angle = 0;
-            double width = arrangeSize.Width;
-
-            if (arrangeSize.Height < arrangeSize.Width)
-            {
-                width = arrangeSize.Height;
-            }
-
-            var innerRadius = (width - width * ShapeHeight / 100) / 2;
+            var innerRadius = radius - radius * ShapeHeight / 100;
             var shapeWidth = Math.Truncate(2 * Math.PI * innerRadius / numShapes * (100 - ShapesGap) / 100);
-            var radius = width / 2;
             var shapeHeight = radius - innerRadius;
 
-            for (int i = 0; i < numShapes; i++)
-            {
-                var shape = (Shape)GetVisualChild(i);
+            return new Size(shapeWidth, shapeHeight);
+        }
 
-                var sin = Math.Sin(angle);
-                var cos = Math.Cos(angle);
+        protected override void PrepareArrangeShape(Shape shape, double angle, Size shapeSize)
+        {
+            var transformGroup = new TransformGroup();
+            var translate = new TranslateTransform(-shapeSize.Width / 2, 0);
+            var rotate = new RotateTransform(angle);
+            transformGroup.Children.Add(translate);
+            transformGroup.Children.Add(rotate);
 
-                var x = cos * radius + radius;
-                var y = sin * radius + radius;
-
-                var tg = new TransformGroup();
-                var trans = new TranslateTransform(-shapeWidth / 2, 0);
-                var degrees = angle * 180 / Math.PI + 90;
-                var rt = new RotateTransform(degrees);
-                tg.Children.Add(trans);
-                tg.Children.Add(rt);
-                shape.RenderTransform = tg;
-
-                shape.Arrange(new Rect(x, y, shapeWidth, shapeHeight));
-
-                shape.Opacity = (numShapes - i) / (double)numShapes;
-                angle += 2 * Math.PI / numShapes;
-            }
-
-            return arrangeSize;
+            shape.RenderTransform = transformGroup;
         }
 
         protected override Shape CreateShape()

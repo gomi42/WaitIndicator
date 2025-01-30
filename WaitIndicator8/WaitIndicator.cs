@@ -109,20 +109,62 @@ namespace WaitIndicator
             return new Size(width, width);
         }
 
-        private void CreateShapes()
+        protected override Size ArrangeOverride(Size arrangeSize)
         {
-            for (int i = 0; i < Shapes; i++)
+            if (VisualChildrenCount == 0)
             {
-                AddNewShape();
+                return arrangeSize;
             }
+
+            int numShapes = VisualChildrenCount;
+            double angle = 0;
+            double width = arrangeSize.Width;
+
+            if (arrangeSize.Height < arrangeSize.Width)
+            {
+                width = arrangeSize.Height;
+            }
+
+            var radius = width / 2;
+            var shapeSize = BeginArrangeShapes(radius, numShapes);
+
+            for (int i = 0; i < numShapes; i++)
+            {
+                var shape = (Shape)children[i];
+
+                var sin = Math.Sin(angle);
+                var cos = Math.Cos(angle);
+
+                var x = cos * radius + radius;
+                var y = sin * radius + radius;
+
+                var degrees = angle * 180 / Math.PI + 90;
+                PrepareArrangeShape(shape, degrees, shapeSize);
+                shape.Arrange(new Rect(x, y, shapeSize.Width, shapeSize.Height));
+
+                angle += 2 * Math.PI / numShapes;
+            }
+
+            EndArrangeShapes();
+
+            return arrangeSize;
         }
 
-        private void CreateStoryBoard()
+        protected virtual Size BeginArrangeShapes(double width, int numShapes)
+        {
+            throw new Exception("Either override 'ArrangeOverride' or 'BeginArrangeShapes'");
+        }
+
+        protected virtual void PrepareArrangeShape(Shape shape, double angle, Size shapeSize) { }
+        
+        protected virtual void EndArrangeShapes() { }
+
+        protected virtual Storyboard CreateStoryBoard()
         {
             double duration = Duration.TotalMilliseconds;
             double step = duration / VisualChildrenCount;
 
-            storyboard = new Storyboard();
+            var storyboard = new Storyboard();
             storyboard.RepeatBehavior = RepeatBehavior.Forever;
 
             for (int i = 1; i < VisualChildrenCount; i++)
@@ -145,6 +187,8 @@ namespace WaitIndicator
                 Storyboard.SetTargetProperty(animation, new PropertyPath(OpacityProperty));
                 storyboard.Children.Add(animation);
             }
+
+            return storyboard;
         }
 
         private void OnFillChanged()
@@ -178,6 +222,14 @@ namespace WaitIndicator
             InvalidateArrange();
         }
 
+        private void CreateShapes()
+        {
+            for (int i = 0; i < Shapes; i++)
+            {
+                AddNewShape();
+            }
+        }
+
         private void AddNewShape()
         {
             var shape = CreateShape();
@@ -207,7 +259,7 @@ namespace WaitIndicator
         {
             if (Visibility == Visibility.Visible && Duration.TotalMilliseconds > 0 && Shapes > 0)
             {
-                CreateStoryBoard();
+                storyboard = CreateStoryBoard();
                 storyboard.Begin(this, true);
             }
         }

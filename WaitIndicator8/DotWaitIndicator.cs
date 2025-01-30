@@ -7,51 +7,23 @@ namespace WaitIndicator
 {
     internal class DotWaitIndicator : WaitIndicator
     {
-        protected override Size ArrangeOverride(Size arrangeSize)
+        protected override Size BeginArrangeShapes(double radius, int numShapes)
         {
-            if (VisualChildrenCount == 0)
-            {
-                return arrangeSize;
-            }
+            var dotCenterRadius = numShapes * radius / (numShapes + Math.PI);
+            var shapeWidth = Math.Truncate(2 * Math.PI * dotCenterRadius / numShapes * (100 - ShapesGap) / 100);
 
-            int numShapes = VisualChildrenCount;
-            double angle = 0;
-            double width = arrangeSize.Width;
+            return new Size(shapeWidth, shapeWidth);
+        }
 
-            if (arrangeSize.Height < arrangeSize.Width)
-            {
-                width = arrangeSize.Height;
-            }
+        protected override void PrepareArrangeShape(Shape shape, double angle, Size shapeSize)
+        {
+            var transformGroup = new TransformGroup();
+            var translate = new TranslateTransform(-shapeSize.Width / 2, 0);
+            var rotate = new RotateTransform(angle);
+            transformGroup.Children.Add(translate);
+            transformGroup.Children.Add(rotate);
 
-            var radius = numShapes * width / (2 * (numShapes + Math.PI));
-            var shapeWidth = Math.Truncate(2 * Math.PI * radius / numShapes * (100 - ShapesGap) / 100);
-            radius = width / 2;
-
-            for (int i = 0; i < numShapes; i++)
-            {
-                var shape = (Shape)GetVisualChild(i);
-
-                var sin = Math.Sin(angle);
-                var cos = Math.Cos(angle);
-
-                var x = cos * radius + radius;
-                var y = sin * radius + radius;
-
-                var tg = new TransformGroup();
-                var trans = new TranslateTransform(-shapeWidth / 2, 0);
-                var degrees = angle * 180 / Math.PI + 90;
-                var rt = new RotateTransform(degrees);
-                tg.Children.Add(trans);
-                tg.Children.Add(rt);
-                shape.RenderTransform = tg;
-
-                shape.Arrange(new Rect(x, y, shapeWidth, shapeWidth));
-
-                shape.Opacity = (numShapes - i) / (double)numShapes;
-                angle += 2 * Math.PI / numShapes;
-            }
-
-            return arrangeSize;
+            shape.RenderTransform = transformGroup;
         }
 
         protected override Shape CreateShape()
