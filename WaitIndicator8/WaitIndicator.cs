@@ -142,6 +142,13 @@ namespace WaitIndicator
                 PrepareArrangeShape(shape, degrees, shapeSize);
                 shape.Arrange(new Rect(x, y, shapeSize.Width, shapeSize.Height));
 
+                var transformGroup = new TransformGroup();
+                var translate = new TranslateTransform(-shapeSize.Width / 2, 0);
+                var rotate = new RotateTransform(degrees);
+                transformGroup.Children.Add(translate);
+                transformGroup.Children.Add(rotate);
+                shape.RenderTransform = transformGroup;
+
                 angle += 2 * Math.PI / numShapes;
             }
 
@@ -234,6 +241,7 @@ namespace WaitIndicator
         {
             var shape = CreateShape();
             shape.Fill = Fill;
+            shape.RenderTransformOrigin = new Point(0, 0);
             children.Add(shape);
         }
 

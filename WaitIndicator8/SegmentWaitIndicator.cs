@@ -18,7 +18,6 @@ namespace WaitIndicator
         protected override void PrepareArrangeShape(Shape shape, double angle, Size shapeSize)
         {
             ((Path)shape).Data = currentGeometry;
-            shape.RenderTransform = new RotateTransform(angle);
         }
 
         protected override void EndArrangeShapes()
@@ -29,7 +28,6 @@ namespace WaitIndicator
         protected override Shape CreateShape()
         {
             var shape = new Path();
-            shape.RenderTransformOrigin = new Point(0, 0);
             shape.Stretch = Stretch.None;
 
             return shape;
@@ -52,6 +50,8 @@ namespace WaitIndicator
             var x2 = -x1;
             var y2 = y1;
 
+            var xOffset = -x1;
+
             PathGeometry pathGeometry = new PathGeometry();
             PathFigureCollection pathFigureCollection = new PathFigureCollection();
             pathGeometry.Figures = pathFigureCollection;
@@ -60,7 +60,7 @@ namespace WaitIndicator
             pathFigure = new PathFigure();
             pathFigureCollection.Add(pathFigure);
             pathFigure.IsClosed = true;
-            pathFigure.StartPoint = new Point(x1, outerRadius - y1);
+            pathFigure.StartPoint = new Point(x1 + xOffset, outerRadius - y1);
 
             pathSegmentCollection = new PathSegmentCollection();
             pathFigure.Segments = pathSegmentCollection;
@@ -69,7 +69,7 @@ namespace WaitIndicator
             arcSegment = new ArcSegment();
             pathSegmentCollection.Add(arcSegment);
 
-            arcSegment.Point = new Point(x2, outerRadius - y2);
+            arcSegment.Point = new Point(x2 + xOffset, outerRadius - y2);
             arcSegment.Size = new Size(outerRadius, outerRadius);
             arcSegment.SweepDirection = SweepDirection.Clockwise;
             arcSegment.IsLargeArc = false;
@@ -95,12 +95,12 @@ namespace WaitIndicator
             LineSegment lineSegment;
             lineSegment = new LineSegment();
             pathSegmentCollection.Add(lineSegment);
-            lineSegment.Point = new Point(x2, outerRadius - y1);
+            lineSegment.Point = new Point(x2 + xOffset, outerRadius - y1);
 
             arcSegment = new ArcSegment();
             pathSegmentCollection.Add(arcSegment);
 
-            arcSegment.Point = new Point(x1, outerRadius - y2);
+            arcSegment.Point = new Point(x1 + xOffset, outerRadius - y2);
             arcSegment.Size = new Size(innerRadius, innerRadius);
             arcSegment.SweepDirection = SweepDirection.Counterclockwise;
             arcSegment.IsLargeArc = false;
