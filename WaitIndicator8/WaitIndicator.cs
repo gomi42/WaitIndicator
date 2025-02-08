@@ -38,8 +38,8 @@ namespace WaitIndicator
 
         public int Shapes
         {
-            get { return (int)GetValue(ShapesProperty); }
-            set { SetValue(ShapesProperty, value); }
+            get => (int)GetValue(ShapesProperty);
+            set => SetValue(ShapesProperty, value);
         }
 
         public static readonly DependencyProperty ShapesProperty =
@@ -52,8 +52,8 @@ namespace WaitIndicator
 
         public double ShapesGap
         {
-            get { return (double)GetValue(ShapesGapProperty); }
-            set { SetValue(ShapesGapProperty, value); }
+            get => (double)GetValue(ShapesGapProperty);
+            set => SetValue(ShapesGapProperty, value);
         }
 
         public static readonly DependencyProperty ShapesGapProperty =
@@ -61,8 +61,8 @@ namespace WaitIndicator
 
         public TimeSpan Duration
         {
-            get { return (TimeSpan)GetValue(DurationProperty); }
-            set { SetValue(DurationProperty, value); }
+            get => (TimeSpan)GetValue(DurationProperty);
+            set => SetValue(DurationProperty, value);
         }
 
         public static readonly DependencyProperty DurationProperty =
