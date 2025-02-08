@@ -43,11 +43,26 @@ namespace WaitIndicator
         }
 
         public static readonly DependencyProperty ShapesProperty =
-            DependencyProperty.Register("Shapes", typeof(int), typeof(WaitIndicator), new PropertyMetadata(8, ShapesChanged));
+            DependencyProperty.Register("Shapes",
+                                        typeof(int),
+                                        typeof(WaitIndicator),
+                                        new FrameworkPropertyMetadata(8, FrameworkPropertyMetadataOptions.AffectsArrange, ShapesChanged, CoerceShapeChanged));
 
         private static void ShapesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((WaitIndicator)d).OnShapesChanged();
+        }
+
+        private static object CoerceShapeChanged(DependencyObject d, object obj)
+        {
+            var val = (int)obj;
+
+            if (val < 1)
+            {
+                val = 1;
+            }
+
+            return val;
         }
 
         public double ShapesGap
@@ -57,7 +72,24 @@ namespace WaitIndicator
         }
 
         public static readonly DependencyProperty ShapesGapProperty =
-            DependencyProperty.Register("ShapesGap", typeof(double), typeof(WaitIndicator), new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.AffectsArrange));
+            DependencyProperty.Register("ShapesGap",
+                                        typeof(double),
+                                        typeof(WaitIndicator),
+                                        new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.AffectsArrange, ShapesGapChanged, CoerceShapeGapChanged));
+
+        private static void ShapesGapChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {}
+
+        private static object CoerceShapeGapChanged(DependencyObject d, object obj)
+        {
+            var val = (double)obj;
+
+            if (val < 0)
+            {
+                val = 0;
+            }
+
+            return val;
+        }
 
         public TimeSpan Duration
         {
@@ -226,7 +258,6 @@ namespace WaitIndicator
             }
 
             TryCreateAndRunStoryboard();
-            InvalidateArrange();
         }
 
         private void CreateShapes()

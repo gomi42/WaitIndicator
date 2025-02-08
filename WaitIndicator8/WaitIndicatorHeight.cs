@@ -11,7 +11,29 @@ namespace WaitIndicator
         }
 
         public static readonly DependencyProperty ShapeHeightProperty =
-            DependencyProperty.Register("ShapeHeight", typeof(double), typeof(WaitIndicatorHeight), new FrameworkPropertyMetadata(50.0, FrameworkPropertyMetadataOptions.AffectsArrange));
+            DependencyProperty.Register("ShapeHeight",
+                                        typeof(double),
+                                        typeof(WaitIndicatorHeight),
+                                        new FrameworkPropertyMetadata(50.0, FrameworkPropertyMetadataOptions.AffectsArrange, ShapesHeightChanged, CoerceShapeHeightChanged));
+
+        private static void ShapesHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+
+        private static object CoerceShapeHeightChanged(DependencyObject d, object obj)
+        {
+            var val = (double)obj;
+
+            if (val < 0)
+            {
+                val = 0;
+            }
+            else
+            if (val > 95)
+            {
+                val = 95;
+            }
+
+            return val;
+        }
 
     }
 }
